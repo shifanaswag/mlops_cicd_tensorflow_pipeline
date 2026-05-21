@@ -1,3 +1,4 @@
+
 name: ML CI Pipeline
 
 on:
@@ -11,26 +12,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout code
+      # Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. Setup Python
+      # Setup Python
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.10"
 
-      # 3. Install dependencies
+      # Install dependencies
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # 4. Run tests
-      - name: Run pytest
-        run: pytest tests/
-
-      # 5. Train model (important for your project)
+      # Train model FIRST
       - name: Train model
         run: python src/train.py
+
+      # Run tests AFTER model exists
+      - name: Run pytest
+        run: pytest tests/ -v
