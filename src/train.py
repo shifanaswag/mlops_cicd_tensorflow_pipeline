@@ -1,6 +1,7 @@
 import mlflow
 import mlflow.tensorflow
 import tensorflow as tf
+import os
 
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.models import Sequential
@@ -96,10 +97,12 @@ with mlflow.start_run():
         model,
         artifact_path="iris_model"
     )
+    # Create folders if they don't exist
+    os.makedirs("model", exist_ok=True)
+    os.makedirs("serving_model", exist_ok=True)
     # Save Keras format (for tests + CI)
     model.save("model/iris_model.keras")
     # Save TF Serving format (for deployment)
     model.export("serving_model/iris_model")
-
     print("\nModel saved successfully!")
     print("Model logged to MLflow successfully!")
