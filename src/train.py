@@ -96,9 +96,10 @@ with mlflow.start_run():
         model,
         artifact_path="iris_model"
     )
-
-    # Save model for TensorFlow Serving
-    model.export("model/iris_model")
+    # Save Keras format (for tests + CI)
+    model.save("model/iris_model.keras")
+    # Save TF Serving format (for deployment)
+    model.export("serving_model/iris_model")
 
     print("\nModel saved successfully!")
     print("Model logged to MLflow successfully!")
