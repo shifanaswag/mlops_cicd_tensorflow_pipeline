@@ -2,6 +2,7 @@ import mlflow
 import mlflow.tensorflow
 import tensorflow as tf
 import os
+import joblib
 
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.models import Sequential
@@ -38,6 +39,7 @@ with mlflow.start_run():
 
     x_train = scaler.fit_transform(x_train)
     x_test = scaler.transform(x_test)
+    joblib.dump(scaler, "model/scaler.pkl")
 
     # Build model
     model = Sequential([
@@ -95,7 +97,8 @@ with mlflow.start_run():
     # Log model to MLflow
     mlflow.tensorflow.log_model(
         model,
-        artifact_path="iris_model"
+        artifact_path="iris_model",
+        registered_model_name="Iris_model"
     )
     # Create folders if they don't exist
     os.makedirs("model", exist_ok=True)
@@ -103,6 +106,6 @@ with mlflow.start_run():
     # Save Keras format (for tests + CI)
     model.save("model/iris_model.keras")
     # Save TF Serving format (for deployment)
-    model.export("serving_model/iris_model")
+    model.export("serving_model/iris_model/1")
     print("\nModel saved successfully!")
     print("Model logged to MLflow successfully!")
